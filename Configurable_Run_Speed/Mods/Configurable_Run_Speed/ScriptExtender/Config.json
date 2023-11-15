@@ -1,0 +1,5 @@
+{
+    "RequiredVersion": 7,
+    "ModTable": "Configurable_Run_Speed",
+    "FeatureFlags": ["Lua"]
+}
