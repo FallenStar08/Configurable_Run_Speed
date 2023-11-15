@@ -88,32 +88,34 @@ end
 
 --For v10
 --TODO store defaults template values and use them in restore, fall back to DEFAULTS otherwise
-function UpdateTemplateWithSpeedMultiplierForCharacter(character, movement_speed_multi, climbing_speed_multi, acceleration_multi)
-
+function UpdateTemplateWithSpeedMultiplierForCharacter(character, movement_speed_multi, climbing_speed_multi,
+                                                       acceleration_multi)
     local sneakingEnabled = Config.GetValue(Config.config_tbl, "SNEAKING_ENABLED") == 1
     local characterTemplate = Ext.Template.GetTemplate(character)
     local charEntity = Ext.Entity.Get(character)
-    local transfoTemplate = charEntity and charEntity.GameObjectVisual and Ext.Template.GetTemplate(charEntity.GameObjectVisual.RootTemplateId)
-    local function updateTemplate(template,transfo_template, defaults, multiplier)
+    local transfoTemplate = charEntity and charEntity.GameObjectVisual and
+    Ext.Template.GetTemplate(charEntity.GameObjectVisual.RootTemplateId)
+    local function updateTemplate(template, transfo_template, defaults, multiplier)
         if template then
             for k, v in pairs(defaults) do
                 template[k] = v * multiplier
-                if transfo_template then transfo_template[k]=v * multiplier end
+                if transfo_template then transfo_template[k] = v * multiplier end
             end
         end
     end
 
-    updateTemplate(characterTemplate,transfoTemplate, DEFAULTS.Run,movement_speed_multi)
-    updateTemplate(characterTemplate,transfoTemplate, DEFAULTS.Acceleration,acceleration_multi)
-    updateTemplate(characterTemplate,transfoTemplate, DEFAULTS.Climb,climbing_speed_multi)
+    updateTemplate(characterTemplate, transfoTemplate, DEFAULTS.Run, movement_speed_multi)
+    updateTemplate(characterTemplate, transfoTemplate, DEFAULTS.Acceleration, acceleration_multi)
+    updateTemplate(characterTemplate, transfoTemplate, DEFAULTS.Climb, climbing_speed_multi)
     if sneakingEnabled then
-        updateTemplate(characterTemplate,transfoTemplate, DEFAULTS.Sneak,movement_speed_multi)
+        updateTemplate(characterTemplate, transfoTemplate, DEFAULTS.Sneak, movement_speed_multi)
     end
 end
 
 function RestoreTemplateDefaultSpeedForCharacter(character)
-    UpdateTemplateWithSpeedMultiplierForCharacter(character,1,1,1)
+    UpdateTemplateWithSpeedMultiplierForCharacter(character, 1, 1, 1)
 end
+
 function RestoreOriginalValues(mergedList)
     BasicDebug("RestoreOriginalValues() - Restoring original speed")
     for _, listItem in pairs(mergedList) do
@@ -242,7 +244,7 @@ Ext.Osiris.RegisterListener("LeftCombat", 2, "after", function(object, combatGui
 end)
 
 -- -------------------------------------------------------------------------- --
---                             PARTY JOINED / LEFT                            --
+--                             PARTY JOINED / LEFT / TRANSFORMED              --
 -- -------------------------------------------------------------------------- --
 
 
@@ -270,5 +272,21 @@ Ext.Osiris.RegisterListener("CharacterLeftParty", 1, "after", function(character
 
     if not success then
         BasicDebug("Error while restoring character speed: " .. error_message)
+    end
+end)
+
+Ext.Osiris.RegisterListener("ObjectTransformed", 2, "after", function(object, toTemplate)
+    if Osi.IsPartyMember(object, 1) == 1 then
+        if Osi.IsInCombat(object) == 1 and Config.config_tbl.COMBAT_ENABLED == 1 then
+            UpdateTemplateWithSpeedMultiplierForCharacter(object,
+                Config.config_tbl["Combat_Party_MovementSpeedMultiplier"],
+                Config.config_tbl["Combat_Party_ClimbSpeedMultiplier"],
+                Config.config_tbl["Combat_Party_AccelerationMultiplier"])
+        elseif Osi.IsInCombat(object) == 0 then
+            UpdateTemplateWithSpeedMultiplierForCharacter(object,
+                Config.config_tbl["Exploration_MovementSpeedMultiplier"],
+                Config.config_tbl["Exploration_ClimbSpeedMultiplier"],
+                Config.config_tbl["Exploration_AccelerationMultiplier"])
+        end
     end
 end)
