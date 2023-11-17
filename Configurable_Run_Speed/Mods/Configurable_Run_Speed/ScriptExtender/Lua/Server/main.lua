@@ -290,3 +290,7 @@ Ext.Osiris.RegisterListener("ObjectTransformed", 2, "after", function(object, to
         end
     end
 end)
+
+Ext.Events.ResetCompleted:Subscribe(function()
+    if not Config.initDone then Config.Init() end
+end)
