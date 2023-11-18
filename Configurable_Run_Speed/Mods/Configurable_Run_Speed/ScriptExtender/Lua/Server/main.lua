@@ -225,6 +225,8 @@ Ext.Osiris.RegisterListener("EnteredCombat", 2, "after", function(object, combat
     end
 end)
 
+--TODO check if any remaining enemy in the combat shares the same template with one who left(died) to not slow down
+--TODO duplicates before the end
 Ext.Osiris.RegisterListener("LeftCombat", 2, "after", function(object, combatGuid)
     --Always set speed to exploration after leaving combat
     if Osi.IsPartyMember(object, 1) == 1 then
