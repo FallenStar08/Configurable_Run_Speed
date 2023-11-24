@@ -27,15 +27,6 @@ DEFAULTS = {
 -- -------------------------------------------------------------------------- --
 --                                General Stuff                               --
 -- -------------------------------------------------------------------------- --
-function GetBattlies()
-    local battlies = {}
-    local baddies = Osi.DB_Is_InCombat:Get(nil, nil)
-    for _, bad in pairs(baddies) do
-        table.insert(battlies, bad[1])
-        print(bad[1])
-        return battlies
-    end
-end
 
 function GetBattliesBaddies(ALLIES)
     local battlies = GetBattlies()
@@ -90,6 +81,7 @@ end
 --TODO store defaults template values and use them in restore, fall back to DEFAULTS otherwise
 function UpdateTemplateWithSpeedMultiplierForCharacter(character, movement_speed_multi, climbing_speed_multi,
                                                        acceleration_multi)
+    character=string.sub(character,-36)
     local sneakingEnabled = Config.GetValue(Config.config_tbl, "SNEAKING_ENABLED") == 1
     local characterTemplate = Ext.Template.GetTemplate(character)
     local charEntity = Ext.Entity.Get(character)
@@ -113,6 +105,7 @@ function UpdateTemplateWithSpeedMultiplierForCharacter(character, movement_speed
 end
 
 function RestoreTemplateDefaultSpeedForCharacter(character)
+    character=string.sub(character,-36)
     UpdateTemplateWithSpeedMultiplierForCharacter(character, 1, 1, 1)
 end
 
