@@ -83,7 +83,7 @@ function UpdateTemplateWithSpeedMultiplierForCharacter(character, movement_speed
                                                        acceleration_multi)
     character=string.sub(character,-36)
     local sneakingEnabled = Config.GetValue(Config.config_tbl, "SNEAKING_ENABLED") == 1
-    local characterTemplate = Ext.Template.GetTemplate(character)
+    local characterTemplate = Ext.Template.GetTemplate(character) or Ext.Template.GetTemplate(string.sub(Osi.GetTemplate(character),-36))
     local charEntity = Ext.Entity.Get(character)
     local transfoTemplate = charEntity and charEntity.GameObjectVisual and
     Ext.Template.GetTemplate(charEntity.GameObjectVisual.RootTemplateId)
