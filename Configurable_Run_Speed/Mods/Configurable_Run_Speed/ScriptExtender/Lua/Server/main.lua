@@ -1,7 +1,7 @@
 Ext.Require("Server/_ModInfos.lua")
 Ext.Require("Shared/_Globals.lua")
 Ext.Require("Shared/_Utils.lua")
-Ext.Require("Server/_Config.lua")
+Ext.Require("Shared/_Config.lua")
 -- -------------------------------------------------------------------------- --
 --                                   GLOBALS                                  --
 -- -------------------------------------------------------------------------- --
@@ -82,7 +82,7 @@ end
 function UpdateTemplateWithSpeedMultiplierForCharacter(character, movement_speed_multi, climbing_speed_multi,
                                                        acceleration_multi)
     character=string.sub(character,-36)
-    local sneakingEnabled = Config.GetValue(Config.config_tbl, "SNEAKING_ENABLED") == 1
+    local sneakingEnabled = CONFIG.SNEAKING_ENABLED == 1
     local characterTemplate = Ext.Template.GetTemplate(character) or Ext.Template.GetTemplate(string.sub(Osi.GetTemplate(character),-36))
     local charEntity = Ext.Entity.Get(character)
     local transfoTemplate = charEntity and charEntity.GameObjectVisual and
@@ -130,18 +130,18 @@ Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", function(level, 
     --(They should already be set since save/load doesn't reset them but you never know)
     BasicDebug("EV_LevelGameplayStarted : ")
     for _, ally in pairs(ALLIES) do
-        if Osi.IsInCombat(ally) == 1 and Config.config_tbl.COMBAT_ENABLED == 1 then
+        if Osi.IsInCombat(ally) == 1 and CONFIG.COMBAT_ENABLED == 1 then
             UpdateTemplateWithSpeedMultiplierForCharacter(ally,
-                Config.config_tbl["Combat_Party_MovementSpeedMultiplier"],
-                Config.config_tbl["Combat_Party_ClimbSpeedMultiplier"],
-                Config.config_tbl["Combat_Party_AccelerationMultiplier"])
-        elseif Osi.IsInCombat(ally) == 1 and Config.config_tbl.COMBAT_ENABLED == 0 then
+            CONFIG["Combat_Party_MovementSpeedMultiplier"],
+            CONFIG["Combat_Party_ClimbSpeedMultiplier"],
+            CONFIG["Combat_Party_AccelerationMultiplier"])
+        elseif Osi.IsInCombat(ally) == 1 and CONFIG.COMBAT_ENABLED == 0 then
             RestoreTemplateDefaultSpeedForCharacter(ally)
         else
             UpdateTemplateWithSpeedMultiplierForCharacter(ally,
-                Config.config_tbl["Exploration_MovementSpeedMultiplier"],
-                Config.config_tbl["Exploration_ClimbSpeedMultiplier"],
-                Config.config_tbl["Exploration_AccelerationMultiplier"])
+                CONFIG["Exploration_MovementSpeedMultiplier"],
+                CONFIG["Exploration_ClimbSpeedMultiplier"],
+                CONFIG["Exploration_AccelerationMultiplier"])
         end
     end
 end)
@@ -149,7 +149,7 @@ end)
 --This is op, nerf pls.
 Ext.Events.GameStateChanged:Subscribe(function(e)
     if e.FromState == "LoadModule" and e.ToState == "LoadSession" then
-        if not Config.initDone then Config.Init() end
+        if not CONFIG then InitConfig() end
     end
     -- ----------------------------- Before Saving ------------------------------ --
     --BasicDebug("From state : " .. e.FromState .. " to state : " .. e.ToState)
@@ -162,18 +162,18 @@ Ext.Events.GameStateChanged:Subscribe(function(e)
         BasicDebug("Stupid game, I was merely pretending to be slow!")
         ALLIES = MergeSquadiesAndSummonies()
         for _, ally in pairs(ALLIES) do
-            if Osi.IsInCombat(ally) == 1 and Config.config_tbl.COMBAT_ENABLED == 1 then
+            if Osi.IsInCombat(ally) == 1 and CONFIG.COMBAT_ENABLED == 1 then
                 UpdateTemplateWithSpeedMultiplierForCharacter(ally,
-                    Config.config_tbl["Combat_Party_MovementSpeedMultiplier"],
-                    Config.config_tbl["Combat_Party_ClimbSpeedMultiplier"],
-                    Config.config_tbl["Combat_Party_AccelerationMultiplier"])
-            elseif Osi.IsInCombat(ally) == 1 and Config.config_tbl.COMBAT_ENABLED == 0 then
+                    CONFIG["Combat_Party_MovementSpeedMultiplier"],
+                    CONFIG["Combat_Party_ClimbSpeedMultiplier"],
+                    CONFIG["Combat_Party_AccelerationMultiplier"])
+            elseif Osi.IsInCombat(ally) == 1 and CONFIG.COMBAT_ENABLED == 0 then
                 RestoreTemplateDefaultSpeedForCharacter(ally)
             else
                 UpdateTemplateWithSpeedMultiplierForCharacter(ally,
-                    Config.config_tbl["Exploration_MovementSpeedMultiplier"],
-                    Config.config_tbl["Exploration_ClimbSpeedMultiplier"],
-                    Config.config_tbl["Exploration_AccelerationMultiplier"])
+                    CONFIG["Exploration_MovementSpeedMultiplier"],
+                    CONFIG["Exploration_ClimbSpeedMultiplier"],
+                    CONFIG["Exploration_AccelerationMultiplier"])
             end
         end
         -- ------------------ Gonna load a save or go back to main ------------------ --
@@ -184,7 +184,7 @@ Ext.Events.GameStateChanged:Subscribe(function(e)
         RestoreOriginalValues(ALLIES)
         -- -------------------------------- for reloads ------------------------------- --
     elseif e.FromState == "UnloadSession" and e.ToState == "LoadSession" then
-        if not Config.initDone then Config.Init() end
+        if not CONFIG then InitConfig() end
     end
 end)
 
@@ -195,20 +195,20 @@ end)
 
 --We don't use CombatStarted because enemies/players can join late
 Ext.Osiris.RegisterListener("EnteredCombat", 2, "after", function(object, combatGuid)
-    if Config.config_tbl.COMBAT_ENABLED == 1 then
+    if CONFIG.COMBAT_ENABLED == 1 then
         if Osi.IsPartyMember(object, 1) == 1 then
             BasicDebug("EV_EnteredCombat event fired for party member : " .. object)
             UpdateTemplateWithSpeedMultiplierForCharacter(object,
-                Config.config_tbl["Combat_Party_MovementSpeedMultiplier"],
-                Config.config_tbl["Combat_Party_ClimbSpeedMultiplier"],
-                Config.config_tbl["Combat_Party_AccelerationMultiplier"])
+                CONFIG["Combat_Party_MovementSpeedMultiplier"],
+                CONFIG["Combat_Party_ClimbSpeedMultiplier"],
+                CONFIG["Combat_Party_AccelerationMultiplier"])
             return
         elseif Osi.IsCharacter(object) == 1 then
             BasicDebug("EV_EnteredCombat event fired for entity : " .. object)
             UpdateTemplateWithSpeedMultiplierForCharacter(object,
-                Config.config_tbl["Combat_Enemy_MovementSpeedMultiplier"],
-                Config.config_tbl["Combat_Enemy_ClimbSpeedMultiplier"],
-                Config.config_tbl["Combat_Enemy_AccelerationMultiplier"])
+                CONFIG["Combat_Enemy_MovementSpeedMultiplier"],
+                CONFIG["Combat_Enemy_ClimbSpeedMultiplier"],
+                CONFIG["Combat_Enemy_AccelerationMultiplier"])
             return
         else
             return
@@ -225,11 +225,11 @@ Ext.Osiris.RegisterListener("LeftCombat", 2, "after", function(object, combatGui
     if Osi.IsPartyMember(object, 1) == 1 then
         BasicDebug("EV_LeftCombat event fired for party member : " .. object)
         UpdateTemplateWithSpeedMultiplierForCharacter(object,
-            Config.config_tbl["Exploration_MovementSpeedMultiplier"],
-            Config.config_tbl["Exploration_ClimbSpeedMultiplier"],
-            Config.config_tbl["Exploration_AccelerationMultiplier"])
+            CONFIG["Exploration_MovementSpeedMultiplier"],
+            CONFIG["Exploration_ClimbSpeedMultiplier"],
+            CONFIG["Exploration_AccelerationMultiplier"])
         return
-    elseif Osi.IsCharacter(object) == 1 and Config.config_tbl.COMBAT_ENABLED == 1 then
+    elseif Osi.IsCharacter(object) == 1 and CONFIG.COMBAT_ENABLED == 1 then
         BasicDebug("EV_LeftCombat event fired for entity : " .. object)
         RestoreTemplateDefaultSpeedForCharacter(object)
         return
@@ -248,9 +248,9 @@ Ext.Osiris.RegisterListener("CharacterJoinedParty", 1, "after", function(charact
 
     local success, error_message = pcall(function()
         UpdateTemplateWithSpeedMultiplierForCharacter(character,
-            Config.config_tbl["Exploration_MovementSpeedMultiplier"],
-            Config.config_tbl["Exploration_ClimbSpeedMultiplier"],
-            Config.config_tbl["Exploration_AccelerationMultiplier"])
+            CONFIG["Exploration_MovementSpeedMultiplier"],
+            CONFIG["Exploration_ClimbSpeedMultiplier"],
+            CONFIG["Exploration_AccelerationMultiplier"])
     end)
 
     if not success then
@@ -272,20 +272,20 @@ end)
 
 Ext.Osiris.RegisterListener("ObjectTransformed", 2, "after", function(object, toTemplate)
     if Osi.IsPartyMember(object, 1) == 1 then
-        if Osi.IsInCombat(object) == 1 and Config.config_tbl.COMBAT_ENABLED == 1 then
+        if Osi.IsInCombat(object) == 1 and CONFIG.COMBAT_ENABLED == 1 then
             UpdateTemplateWithSpeedMultiplierForCharacter(object,
-                Config.config_tbl["Combat_Party_MovementSpeedMultiplier"],
-                Config.config_tbl["Combat_Party_ClimbSpeedMultiplier"],
-                Config.config_tbl["Combat_Party_AccelerationMultiplier"])
+                CONFIG["Combat_Party_MovementSpeedMultiplier"],
+                CONFIG["Combat_Party_ClimbSpeedMultiplier"],
+                CONFIG["Combat_Party_AccelerationMultiplier"])
         elseif Osi.IsInCombat(object) == 0 then
             UpdateTemplateWithSpeedMultiplierForCharacter(object,
-                Config.config_tbl["Exploration_MovementSpeedMultiplier"],
-                Config.config_tbl["Exploration_ClimbSpeedMultiplier"],
-                Config.config_tbl["Exploration_AccelerationMultiplier"])
+                CONFIG["Exploration_MovementSpeedMultiplier"],
+                CONFIG["Exploration_ClimbSpeedMultiplier"],
+                CONFIG["Exploration_AccelerationMultiplier"])
         end
     end
 end)
 
 Ext.Events.ResetCompleted:Subscribe(function()
-    if not Config.initDone then Config.Init() end
+    if not CONFIG then InitConfig() end
 end)
