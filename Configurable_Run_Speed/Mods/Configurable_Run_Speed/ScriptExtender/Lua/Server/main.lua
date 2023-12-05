@@ -122,30 +122,6 @@ end
 --                              State listeners                               --
 -- -------------------------------------------------------------------------- --
 
-
-Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", function(level, isEditorMode)
-    if level == "SYS_CC_I" then return end
-    ALLIES = MergeSquadiesAndSummonies()
-    --In case we load during a fight, apply the right multipliers.
-    --(They should already be set since save/load doesn't reset them but you never know)
-    BasicDebug("EV_LevelGameplayStarted : ")
-    for _, ally in pairs(ALLIES) do
-        if Osi.IsInCombat(ally) == 1 and CONFIG.COMBAT_ENABLED == 1 then
-            UpdateTemplateWithSpeedMultiplierForCharacter(ally,
-            CONFIG["Combat_Party_MovementSpeedMultiplier"],
-            CONFIG["Combat_Party_ClimbSpeedMultiplier"],
-            CONFIG["Combat_Party_AccelerationMultiplier"])
-        elseif Osi.IsInCombat(ally) == 1 and CONFIG.COMBAT_ENABLED == 0 then
-            RestoreTemplateDefaultSpeedForCharacter(ally)
-        else
-            UpdateTemplateWithSpeedMultiplierForCharacter(ally,
-                CONFIG["Exploration_MovementSpeedMultiplier"],
-                CONFIG["Exploration_ClimbSpeedMultiplier"],
-                CONFIG["Exploration_AccelerationMultiplier"])
-        end
-    end
-end)
-
 --This is op, nerf pls.
 Ext.Events.GameStateChanged:Subscribe(function(e)
     if e.FromState == "LoadModule" and e.ToState == "LoadSession" then
@@ -286,6 +262,30 @@ Ext.Osiris.RegisterListener("ObjectTransformed", 2, "after", function(object, to
     end
 end)
 
-Ext.Events.ResetCompleted:Subscribe(function()
-    if not CONFIG then InitConfig() end
-end)
+local function start(level,isEditorMode)
+    if level == "SYS_CC_I" then return end
+    if not CONFIG then CONFIG=InitConfig() end
+    ALLIES = MergeSquadiesAndSummonies()
+    --In case we load during a fight, apply the right multipliers.
+    --(They should already be set since save/load doesn't reset them but you never know)
+    BasicDebug("EV_LevelGameplayStarted : ")
+    for _, ally in pairs(ALLIES) do
+        if Osi.IsInCombat(ally) == 1 and CONFIG.COMBAT_ENABLED == 1 then
+            UpdateTemplateWithSpeedMultiplierForCharacter(ally,
+            CONFIG["Combat_Party_MovementSpeedMultiplier"],
+            CONFIG["Combat_Party_ClimbSpeedMultiplier"],
+            CONFIG["Combat_Party_AccelerationMultiplier"])
+        elseif Osi.IsInCombat(ally) == 1 and CONFIG.COMBAT_ENABLED == 0 then
+            RestoreTemplateDefaultSpeedForCharacter(ally)
+        else
+            UpdateTemplateWithSpeedMultiplierForCharacter(ally,
+                CONFIG["Exploration_MovementSpeedMultiplier"],
+                CONFIG["Exploration_ClimbSpeedMultiplier"],
+                CONFIG["Exploration_AccelerationMultiplier"])
+        end
+    end
+end
+
+Ext.Osiris.RegisterListener("LevelGameplayStarted",2,"after",start)
+Ext.Events.ResetCompleted:Subscribe(start)
+
