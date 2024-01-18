@@ -1,14 +1,9 @@
--- -------------------------------------------------------------------------- --
---                               Default tables                               --
--- -------------------------------------------------------------------------- --
-
-local default_config_tbl = {
+local default_config={
     LOG_ENABLED = 0,
     COMBAT_ENABLED = 0,
     SNEAKING_ENABLED = 0,
     MOD_ENABLED = 1,
     DEBUG_MESSAGES = 3,
-    VERSION = CurrentVersion,
     Exploration_MovementSpeedMultiplier = 2,
     Exploration_ClimbSpeedMultiplier = 2,
     Exploration_AccelerationMultiplier = 2,
@@ -20,4 +15,4 @@ local default_config_tbl = {
     Combat_Enemy_AccelerationMultiplier = 2
 }
 
-return default_config_tbl
+MOD_INFO=ModInfo:new("Fall_RunSpeed","Fall_RunSpeed",true,default_config)

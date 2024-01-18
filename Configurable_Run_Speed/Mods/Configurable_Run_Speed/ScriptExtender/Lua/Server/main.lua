@@ -1,7 +1,4 @@
-Ext.Require("Server/_ModInfos.lua")
-Ext.Require("Shared/_Globals.lua")
-Ext.Require("Shared/_Utils.lua")
-Ext.Require("Shared/_Config.lua")
+
 -- -------------------------------------------------------------------------- --
 --                                   GLOBALS                                  --
 -- -------------------------------------------------------------------------- --
@@ -222,7 +219,7 @@ end)
 
 local function start(level, isEditorMode)
     if level == "SYS_CC_I" then return end
-    if not CONFIG then CONFIG = InitConfig() end
+    if not CONFIG then CONFIG=InitConfig() end
     ALLIES = MergeSquadiesAndSummonies()
     --In case we load during a fight, apply the right multipliers.
     --TODO fix this for enemies, they don't get speed up yet if you load into a fight

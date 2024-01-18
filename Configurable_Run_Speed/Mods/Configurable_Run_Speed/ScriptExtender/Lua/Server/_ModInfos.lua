@@ -1,1 +1,0 @@
-FOLDER_NAME = "Fall_RunSpeed"; MOD_NAME=FOLDER_NAME
