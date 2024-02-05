@@ -26,7 +26,6 @@ DEFAULTS = {
 -- -------------------------------------------------------------------------- --
 
 local function checkStateAndApplySpeedModifier(character)
-    --First check if character is enemy or party member
 
     -- ---------------------------- Case Party member --------------------------- --
     if Osi.IsPartyMember(character, 1) == 1 then
@@ -180,6 +179,7 @@ end)
 
 --TODO check if any remaining enemy in the combat shares the same template with one who left(died) to not slow down
 --TODO duplicates before the end
+--TODO ideally solve all of this with uservars
 Ext.Osiris.RegisterListener("LeftCombat", 2, "after", function(object, combatGuid)
     checkStateAndApplySpeedModifier(GUID(object))
 end)
@@ -188,7 +188,7 @@ end)
 --                             PARTY JOINED / LEFT / TRANSFORMED              --
 -- -------------------------------------------------------------------------- --
 
-
+--Yes the pcalls are necessary I don't remember why
 Ext.Osiris.RegisterListener("CharacterJoinedParty", 1, "after", function(character)
     BasicDebug("Character " .. character .. " joined the party, attempting to speed them up!")
 
@@ -212,10 +212,12 @@ Ext.Osiris.RegisterListener("CharacterLeftParty", 1, "after", function(character
     end
 end)
 
+--Works most of the time...
 Ext.Osiris.RegisterListener("ShapeshiftChanged", 4, "after", function(character, race,gender,shapeshiftStatus)
     BasicDebug("character shapeshifted...")
     checkStateAndApplySpeedModifier(GUID(character))
 end)
+
 
 local function start(level, isEditorMode)
     if level == "SYS_CC_I" then return end
@@ -223,6 +225,7 @@ local function start(level, isEditorMode)
     ALLIES = MergeSquadiesAndSummonies()
     --In case we load during a fight, apply the right multipliers.
     --TODO fix this for enemies, they don't get speed up yet if you load into a fight
+    --TODO fix with uservars...
     BasicDebug("EV_LevelGameplayStarted : ")
     for _, ally in pairs(ALLIES) do
         checkStateAndApplySpeedModifier(ally)
