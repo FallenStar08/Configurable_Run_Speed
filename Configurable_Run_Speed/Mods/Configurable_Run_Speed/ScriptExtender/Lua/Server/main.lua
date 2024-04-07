@@ -1,4 +1,3 @@
-
 -- -------------------------------------------------------------------------- --
 --                                   GLOBALS                                  --
 -- -------------------------------------------------------------------------- --
@@ -26,7 +25,6 @@ DEFAULTS = {
 -- -------------------------------------------------------------------------- --
 
 local function checkStateAndApplySpeedModifier(character)
-
     -- ---------------------------- Case Party member --------------------------- --
     if Osi.IsPartyMember(character, 1) == 1 then
         --Case combat enabled and in combat
@@ -36,27 +34,27 @@ local function checkStateAndApplySpeedModifier(character)
                 CONFIG["Combat_Party_MovementSpeedMultiplier"],
                 CONFIG["Combat_Party_ClimbSpeedMultiplier"],
                 CONFIG["Combat_Party_AccelerationMultiplier"])
-        --Case Combat disabled and in combat
+            --Case Combat disabled and in combat
         elseif Osi.IsInCombat(character) == 1 and CONFIG.COMBAT_ENABLED == 0 then
             BasicDebug("Speeding down the following party member (Combat started, Combat disabled) : " .. character)
             RestoreTemplateDefaultSpeedForCharacter(character)
-        --Case not in combat
+            --Case not in combat
         else
             BasicDebug("Speeding up the following party member (not in Combat) : " .. character)
             UpdateTemplateWithSpeedMultiplierForCharacter(character,
-            CONFIG["Exploration_MovementSpeedMultiplier"],
-            CONFIG["Exploration_ClimbSpeedMultiplier"],
-            CONFIG["Exploration_AccelerationMultiplier"])
+                CONFIG["Exploration_MovementSpeedMultiplier"],
+                CONFIG["Exploration_ClimbSpeedMultiplier"],
+                CONFIG["Exploration_AccelerationMultiplier"])
         end
-    -- --------------------- Case non party member in combat -------------------- --
-    elseif Osi.IsCharacter(character) == 1 and Osi.IsInCombat(character)==1 and CONFIG.COMBAT_ENABLED == 1  then
+        -- --------------------- Case non party member in combat -------------------- --
+    elseif Osi.IsCharacter(character) == 1 and Osi.IsInCombat(character) == 1 and CONFIG.COMBAT_ENABLED == 1 then
         BasicDebug("Speeding up the following enemy (Combat) : " .. character)
         UpdateTemplateWithSpeedMultiplierForCharacter(character,
             CONFIG["Combat_Enemy_MovementSpeedMultiplier"],
             CONFIG["Combat_Enemy_ClimbSpeedMultiplier"],
             CONFIG["Combat_Enemy_AccelerationMultiplier"])
-    --Case end of combat if combat is enabled
-    elseif Osi.IsCharacter(character) == 1 and Osi.IsInCombat(character)==0 and CONFIG.COMBAT_ENABLED == 1 then
+        --Case end of combat if combat is enabled
+    elseif Osi.IsCharacter(character) == 1 and Osi.IsInCombat(character) == 0 and CONFIG.COMBAT_ENABLED == 1 then
         BasicDebug("Speeding down the following enemy (end of Combat) : " .. character)
         RestoreTemplateDefaultSpeedForCharacter(character)
     end
@@ -117,7 +115,7 @@ function UpdateTemplateWithSpeedMultiplierForCharacter(character, movement_speed
     character = GUID(character)
     local sneakingEnabled = CONFIG.SNEAKING_ENABLED == 1
     local characterTemplate = Ext.Template.GetTemplate(character) or
-    Ext.Template.GetTemplate(GUID(Osi.GetTemplate(character)))
+        Ext.Template.GetTemplate(GUID(Osi.GetTemplate(character)))
     local charEntity = Ext.Entity.Get(character)
     local transfoTemplate = charEntity and charEntity.GameObjectVisual and
         Ext.Template.GetTemplate(charEntity.GameObjectVisual.RootTemplateId)
@@ -135,6 +133,13 @@ function UpdateTemplateWithSpeedMultiplierForCharacter(character, movement_speed
     updateTemplate(characterTemplate, transfoTemplate, DEFAULTS.Climb, climbing_speed_multi)
     if sneakingEnabled then
         updateTemplate(characterTemplate, transfoTemplate, DEFAULTS.Sneak, movement_speed_multi)
+    end
+    local serializedTemplateInfo = Ext.Json.Stringify(Ext.Types.Serialize(characterTemplate))
+    local serializedTransfoTemplateInfo = transfoTemplate and Ext.Json.Stringify(Ext.Types.Serialize(characterTemplate))
+    Ext.Net.BroadcastMessage("Fallen_RunSpeed_TemplateChanged", serializedTemplateInfo)
+    if serializedTransfoTemplateInfo then
+        Ext.Net.BroadcastMessage("Fallen_RunSpeed_TemplateChanged",
+            serializedTransfoTemplateInfo)
     end
 end
 
@@ -162,7 +167,7 @@ Ext.Events.GameStateChanged:Subscribe(function(e)
     --BasicDebug("From state : " .. e.FromState .. " to state : " .. e.ToState)
     if e.FromState == "Running" and e.ToState == "Save" then
         ALLIES = MergeSquadiesAndSummonies()
-        for _,ally in pairs(ALLIES) do
+        for _, ally in pairs(ALLIES) do
             checkStateAndApplySpeedModifier(ally)
         end
     end
@@ -213,7 +218,7 @@ Ext.Osiris.RegisterListener("CharacterLeftParty", 1, "after", function(character
 end)
 
 --Works most of the time...
-Ext.Osiris.RegisterListener("ShapeshiftChanged", 4, "after", function(character, race,gender,shapeshiftStatus)
+Ext.Osiris.RegisterListener("ShapeshiftChanged", 4, "after", function(character, race, gender, shapeshiftStatus)
     BasicDebug("character shapeshifted...")
     checkStateAndApplySpeedModifier(GUID(character))
 end)
@@ -221,7 +226,7 @@ end)
 
 local function start(level, isEditorMode)
     if level == "SYS_CC_I" then return end
-    if not CONFIG then CONFIG=InitConfig() end
+    if not CONFIG then CONFIG = InitConfig() end
     ALLIES = MergeSquadiesAndSummonies()
     --In case we load during a fight, apply the right multipliers.
     --TODO fix this for enemies, they don't get speed up yet if you load into a fight
@@ -234,6 +239,3 @@ end
 
 Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", start)
 Ext.Events.ResetCompleted:Subscribe(start)
-
-
-
