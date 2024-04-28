@@ -1,5 +1,7 @@
 {
-    "RequiredVersion": 10,
+    "RequiredVersion": 15,
     "ModTable": "Configurable_Run_Speed",
-    "FeatureFlags": ["Lua"]
+    "FeatureFlags": [
+        "Lua"
+    ]
 }
