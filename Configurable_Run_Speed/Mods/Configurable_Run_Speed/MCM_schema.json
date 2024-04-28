@@ -46,7 +46,7 @@
                         {
                             "Id": "Exploration_AccelerationMultiplier",
                             "Name": "Exploration acceleration multiplier",
-                            "Type": "slider",
+                            "Type": "slider_float",
                             "Default": 10,
                             "Tooltip": "How much faster you go through speed transitions (walking to running etc)",
                             "Options": {
@@ -57,7 +57,7 @@
                         {
                             "Id": "Exploration_ClimbSpeedMultiplier",
                             "Name": "Exploration climbing speed multiplier",
-                            "Type": "slider",
+                            "Type": "slider_float",
                             "Default": 2,
                             "Tooltip": "How much faster you climb stuff",
                             "Options": {
@@ -68,7 +68,7 @@
                         {
                             "Id": "Exploration_MovementSpeedMultiplier",
                             "Name": "Exploration movement speed modifier",
-                            "Type": "slider",
+                            "Type": "slider_float",
                             "Default": 2,
                             "Tooltip": "How much faster you go, high value will mess with the game physic engine and lead to issue",
                             "Options": {
@@ -85,7 +85,7 @@
                         {
                             "Id": "Combat_Party_AccelerationMultiplier",
                             "Name": "Combat Party acceleration multiplier",
-                            "Type": "slider",
+                            "Type": "slider_float",
                             "Default": 5,
                             "Tooltip": "How much faster you go through speed transitions (walking to running etc) in combat (if combat setting is enabled)",
                             "Options": {
@@ -96,7 +96,7 @@
                         {
                             "Id": "Combat_Party_ClimbSpeedMultiplier",
                             "Name": "Combat Party climbing speed multiplier",
-                            "Type": "slider",
+                            "Type": "slider_float",
                             "Default": 2,
                             "Tooltip": "How much faster you climb stuff in combat (if combat setting is enabled)",
                             "Options": {
@@ -107,7 +107,7 @@
                         {
                             "Id": "Combat_Party_MovementSpeedMultiplier",
                             "Name": "Combat Party movement speed multiplier",
-                            "Type": "slider",
+                            "Type": "slider_float",
                             "Default": 2,
                             "Tooltip": "How much faster you go in combat (if combat setting is enabled) ",
                             "Options": {
@@ -124,7 +124,7 @@
                         {
                             "Id": "Combat_Enemy_AccelerationMultiplier",
                             "Name": "Combat Enemy acceleration multiplier",
-                            "Type": "slider",
+                            "Type": "slider_float",
                             "Default": 10,
                             "Tooltip": "How much faster enemies go through speed transitions (walking to running etc) in combat (if combat setting is enabled)",
                             "Options": {
@@ -135,7 +135,7 @@
                         {
                             "Id": "Combat_Enemy_ClimbSpeedMultiplier",
                             "Name": "Combat Enemy climbing speed multiplier",
-                            "Type": "slider",
+                            "Type": "slider_float",
                             "Default": 2,
                             "Tooltip": "How much faster enemies climb stuff in combat (if combat setting is enabled)",
                             "Options": {
@@ -146,7 +146,7 @@
                         {
                             "Id": "Combat_Enemy_MovementSpeedMultiplier",
                             "Name": "Combat Enemy movement speed multiplier",
-                            "Type": "slider",
+                            "Type": "slider_float",
                             "Default": 2,
                             "Tooltip": "How much faster enemies go in combat (if combat setting is enabled)",
                             "Options": {
@@ -165,7 +165,7 @@
                 {
                     "Id": "debug_level",
                     "Name": "Debug level",
-                    "Type": "slider",
+                    "Type": "slider_int",
                     "Default": 3,
                     "Tooltip": "Debug level for the mod, used mainly for determining which messages to print",
                     "Options": {
