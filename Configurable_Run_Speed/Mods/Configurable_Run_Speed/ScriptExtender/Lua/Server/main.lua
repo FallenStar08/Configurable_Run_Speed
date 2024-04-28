@@ -19,6 +19,7 @@ DEFAULTS = {
     Acceleration = { MovementAcceleration = 12.0, }, --Acceleration, not sure how it behave exactly, how fast you get speedy
 }
 
+MCMCONFIG = Mods.BG3MCM.MCMAPI
 
 -- -------------------------------------------------------------------------- --
 --                                General Stuff                               --
@@ -28,33 +29,38 @@ local function checkStateAndApplySpeedModifier(character)
     -- ---------------------------- Case Party member --------------------------- --
     if Osi.IsPartyMember(character, 1) == 1 then
         --Case combat enabled and in combat
-        if Osi.IsInCombat(character) == 1 and CONFIG.COMBAT_ENABLED == 1 then
+        if Osi.IsInCombat(character) == 1 and MCMCONFIG:GetConfigValue("COMBAT_ENABLED", MOD_INFO.MOD_UUID) == true then
             BasicDebug("Speeding up the following party member (Combat started, Combat enabled) : " .. character)
+            -- UpdateTemplateWithSpeedMultiplierForCharacter(character,
+            --     MCMCONFIG["Combat_Party_MovementSpeedMultiplier"],
+            --     MCMCONFIG["Combat_Party_ClimbSpeedMultiplier"],
+            --     MCMCONFIG["Combat_Party_AccelerationMultiplier"])
+
             UpdateTemplateWithSpeedMultiplierForCharacter(character,
-                CONFIG["Combat_Party_MovementSpeedMultiplier"],
-                CONFIG["Combat_Party_ClimbSpeedMultiplier"],
-                CONFIG["Combat_Party_AccelerationMultiplier"])
+                MCMCONFIG:GetConfigValue("Combat_Party_MovementSpeedMultiplier", MOD_INFO.MOD_UUID),
+                MCMCONFIG:GetConfigValue("Combat_Party_ClimbSpeedMultiplier", MOD_INFO.MOD_UUID),
+                MCMCONFIG:GetConfigValue("Combat_Party_AccelerationMultiplier", MOD_INFO.MOD_UUID))
             --Case Combat disabled and in combat
-        elseif Osi.IsInCombat(character) == 1 and CONFIG.COMBAT_ENABLED == 0 then
+        elseif Osi.IsInCombat(character) == 1 and MCMCONFIG:GetConfigValue("COMBAT_ENABLED", MOD_INFO.MOD_UUID) == false then
             BasicDebug("Speeding down the following party member (Combat started, Combat disabled) : " .. character)
             RestoreTemplateDefaultSpeedForCharacter(character)
             --Case not in combat
         else
             BasicDebug("Speeding up the following party member (not in Combat) : " .. character)
             UpdateTemplateWithSpeedMultiplierForCharacter(character,
-                CONFIG["Exploration_MovementSpeedMultiplier"],
-                CONFIG["Exploration_ClimbSpeedMultiplier"],
-                CONFIG["Exploration_AccelerationMultiplier"])
+                MCMCONFIG:GetConfigValue("Exploration_MovementSpeedMultiplier", MOD_INFO.MOD_UUID),
+                MCMCONFIG:GetConfigValue("Exploration_ClimbSpeedMultiplier", MOD_INFO.MOD_UUID),
+                MCMCONFIG:GetConfigValue("Exploration_AccelerationMultiplier", MOD_INFO.MOD_UUID))
         end
         -- --------------------- Case non party member in combat -------------------- --
-    elseif Osi.IsCharacter(character) == 1 and Osi.IsInCombat(character) == 1 and CONFIG.COMBAT_ENABLED == 1 then
+    elseif Osi.IsCharacter(character) == 1 and Osi.IsInCombat(character) == 1 and MCMCONFIG:GetConfigValue("COMBAT_ENABLED", MOD_INFO.MOD_UUID) == true then
         BasicDebug("Speeding up the following enemy (Combat) : " .. character)
         UpdateTemplateWithSpeedMultiplierForCharacter(character,
-            CONFIG["Combat_Enemy_MovementSpeedMultiplier"],
-            CONFIG["Combat_Enemy_ClimbSpeedMultiplier"],
-            CONFIG["Combat_Enemy_AccelerationMultiplier"])
+            MCMCONFIG:GetConfigValue("Combat_Enemy_MovementSpeedMultiplier", MOD_INFO.MOD_UUID),
+            MCMCONFIG:GetConfigValue("Combat_Enemy_ClimbSpeedMultiplier", MOD_INFO.MOD_UUID),
+            MCMCONFIG:GetConfigValue("Combat_Enemy_AccelerationMultiplier", MOD_INFO.MOD_UUID))
         --Case end of combat if combat is enabled
-    elseif Osi.IsCharacter(character) == 1 and Osi.IsInCombat(character) == 0 and CONFIG.COMBAT_ENABLED == 1 then
+    elseif Osi.IsCharacter(character) == 1 and Osi.IsInCombat(character) == 0 and MCMCONFIG:GetConfigValue("COMBAT_ENABLED", MOD_INFO.MOD_UUID) == true then
         BasicDebug("Speeding down the following enemy (end of Combat) : " .. character)
         RestoreTemplateDefaultSpeedForCharacter(character)
     end
@@ -113,7 +119,7 @@ end
 function UpdateTemplateWithSpeedMultiplierForCharacter(character, movement_speed_multi, climbing_speed_multi,
                                                        acceleration_multi)
     character = GUID(character)
-    local sneakingEnabled = CONFIG.SNEAKING_ENABLED == 1
+    local sneakingEnabled = MCMCONFIG:GetConfigValue("SNEAKING_ENABLED", MOD_INFO.MOD_UUID) == true
     local characterTemplate = Ext.Template.GetTemplate(character) or
         Ext.Template.GetTemplate(GUID(Osi.GetTemplate(character)))
     local charEntity = Ext.Entity.Get(character)
@@ -226,7 +232,7 @@ end)
 
 local function start(level, isEditorMode)
     if level == "SYS_CC_I" then return end
-    if not CONFIG then CONFIG = InitConfig() end
+    --if not MCMCONFIG then MCMCONFIG = InitConfig() end
     ALLIES = MergeSquadiesAndSummonies()
     --In case we load during a fight, apply the right multipliers.
     --TODO fix this for enemies, they don't get speed up yet if you load into a fight
@@ -239,3 +245,19 @@ end
 
 Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", start)
 Ext.Events.ResetCompleted:Subscribe(start)
+
+
+-- -------------------------------------------------------------------------- --
+--                                     MCM                                    --
+-- -------------------------------------------------------------------------- --
+
+Ext.RegisterNetListener("MCM_Saved_Setting", function(call, payload)
+    local data = Ext.Json.Parse(payload)
+    if not data or data.modGUID ~= MOD_INFO.MOD_UUID or not data.settingName then
+        return
+    end
+
+    if string.find(data.settingName, "Party") or string.find(data.settingName, "Exploration") then
+        start()
+    end
+end)
