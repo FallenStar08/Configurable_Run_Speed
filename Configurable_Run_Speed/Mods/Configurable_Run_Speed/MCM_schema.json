@@ -40,18 +40,18 @@
                     ]
                 },
                 {
-                    "SectionId": "SPEED_SETTINGS",
-                    "SectionName": "Speed settings",
+                    "SectionId": "EXPOLORATION_SPEED_SETTINGS",
+                    "SectionName": "Exploration speed settings",
                     "Settings": [
                         {
                             "Id": "Exploration_AccelerationMultiplier",
                             "Name": "Exploration acceleration multiplier",
                             "Type": "slider",
                             "Default": 10,
-                            "Description": "How much faster you go through speed transitions (walking to running etc)",
+                            "Tooltip": "How much faster you go through speed transitions (walking to running etc)",
                             "Options": {
                                 "Min": 0,
-                                "Max": 1000
+                                "Max": 50
                             }
                         },
                         {
@@ -59,10 +59,10 @@
                             "Name": "Exploration climbing speed multiplier",
                             "Type": "slider",
                             "Default": 2,
-                            "Description": "How much faster you climb stuff",
+                            "Tooltip": "How much faster you climb stuff",
                             "Options": {
                                 "Min": 0,
-                                "Max": 1000
+                                "Max": 50
                             }
                         },
                         {
@@ -70,76 +70,88 @@
                             "Name": "Exploration movement speed modifier",
                             "Type": "slider",
                             "Default": 2,
-                            "Description": "How much faster you go, high value will mess with the game physic engine and lead to issue",
+                            "Tooltip": "How much faster you go, high value will mess with the game physic engine and lead to issue",
                             "Options": {
                                 "Min": 0,
-                                "Max": 1000
+                                "Max": 50
                             }
-                        },
+                        }
+                    ]
+                },
+                {
+                    "SectionId": "PARTY_COMBAT_SPEED_SETTINGS",
+                    "SectionName": "combat (party) speed settings",
+                    "Settings": [
                         {
                             "Id": "Combat_Party_AccelerationMultiplier",
-                            "Name": "Exploration climbing speed multiplier",
+                            "Name": "Combat Party acceleration multiplier",
                             "Type": "slider",
                             "Default": 5,
-                            "Description": "How much faster you go through speed transitions (walking to running etc) in combat (if combat setting is enabled)",
+                            "Tooltip": "How much faster you go through speed transitions (walking to running etc) in combat (if combat setting is enabled)",
                             "Options": {
                                 "Min": 0,
-                                "Max": 1000
+                                "Max": 50
                             }
                         },
                         {
                             "Id": "Combat_Party_ClimbSpeedMultiplier",
-                            "Name": "Exploration climbing speed multiplier",
+                            "Name": "Combat Party climbing speed multiplier",
                             "Type": "slider",
                             "Default": 2,
-                            "Description": "How much faster you climb stuff in combat (if combat setting is enabled)",
+                            "Tooltip": "How much faster you climb stuff in combat (if combat setting is enabled)",
                             "Options": {
                                 "Min": 0,
-                                "Max": 1000
+                                "Max": 50
                             }
                         },
                         {
                             "Id": "Combat_Party_MovementSpeedMultiplier",
-                            "Name": "Exploration climbing speed multiplier",
+                            "Name": "Combat Party movement speed multiplier",
                             "Type": "slider",
                             "Default": 2,
-                            "Description": "How much faster you go in combat (if combat setting is enabled) ",
+                            "Tooltip": "How much faster you go in combat (if combat setting is enabled) ",
                             "Options": {
                                 "Min": 0,
-                                "Max": 1000
+                                "Max": 50
                             }
-                        },
+                        }
+                    ]
+                },
+                {
+                    "SectionId": "ENEMY_COMBAT_SPEED_SETTINGS",
+                    "SectionName": "combat (enemies) speed settings",
+                    "Settings": [
                         {
                             "Id": "Combat_Enemy_AccelerationMultiplier",
-                            "Name": "Exploration climbing speed multiplier",
+                            "Name": "Combat Enemy acceleration multiplier",
                             "Type": "slider",
                             "Default": 10,
-                            "Description": "How much faster enemies go through speed transitions (walking to running etc) in combat (if combat setting is enabled)",
+                            "Tooltip": "How much faster enemies go through speed transitions (walking to running etc) in combat (if combat setting is enabled)",
                             "Options": {
                                 "Min": 0,
-                                "Max": 1000
+                                "Max": 50
                             }
                         },
                         {
                             "Id": "Combat_Enemy_ClimbSpeedMultiplier",
-                            "Name": "Exploration climbing speed multiplier",
+                            "Name": "Combat Enemy climbing speed multiplier",
                             "Type": "slider",
                             "Default": 2,
-                            "Description": "How much faster enemies climb stuff in combat (if combat setting is enabled)",
+                            "Tooltip": "How much faster enemies climb stuff in combat (if combat setting is enabled)",
                             "Options": {
                                 "Min": 0,
-                                "Max": 1000
+                                "Max": 50
                             }
                         },
                         {
                             "Id": "Combat_Enemy_MovementSpeedMultiplier",
-                            "Name": "Exploration climbing speed multiplier",
+                            "Name": "Combat Enemy movement speed multiplier",
                             "Type": "slider",
                             "Default": 2,
-                            "Description": "How much faster enemies go in combat (if combat setting is enabled)",
+                            "Tooltip": "How much faster enemies go in combat (if combat setting is enabled)",
                             "Options": {
                                 "Min": 0,
-                                "Max": 1000
+                                "Max": 50
                             }
                         }
                     ]
@@ -155,7 +167,7 @@
                     "Name": "Debug level",
                     "Type": "slider",
                     "Default": 3,
-                    "Description": "Debug level for the mod, used mainly for determining which messages to print",
+                    "Tooltip": "Debug level for the mod, used mainly for determining which messages to print",
                     "Options": {
                         "Min": 0,
                         "Max": 4
