@@ -1,0 +1,167 @@
+{
+    "SchemaVersion": 1,
+    "Tabs": [
+        {
+            "TabName": "General",
+            "TabId": "general",
+            "Settings": [
+                {
+                    "Id": "MOD_ENABLED",
+                    "Name": "Enable mod",
+                    "Type": "checkbox",
+                    "Default": true,
+                    "Description": "Toggle the mod on/off without uninstalling it.",
+                    "Tooltip": "Toggle the mod on/off"
+                }
+            ]
+        },
+        {
+            "TabName": "Features",
+            "TabId": "features",
+            "Sections": [
+                {
+                    "SectionId": "GENERAL_SETTINGS",
+                    "SectionName": "Configurable Movement Speed features",
+                    "Settings": [
+                        {
+                            "Id": "COMBAT_ENABLED",
+                            "Name": "Enable combat settings",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Tooltip": "Whether to enable combat specific settings"
+                        },
+                        {
+                            "Id": "SNEAKING_ENABLED",
+                            "Name": "Enable sneaking speed modifications",
+                            "Type": "checkbox",
+                            "Default": false,
+                            "Tooltip": "Whether to enable sneaking speed modification (this is op)"
+                        }
+                    ]
+                },
+                {
+                    "SectionId": "SPEED_SETTINGS",
+                    "SectionName": "Speed settings",
+                    "Settings": [
+                        {
+                            "Id": "Exploration_AccelerationMultiplier",
+                            "Name": "Exploration acceleration multiplier",
+                            "Type": "slider",
+                            "Default": 10,
+                            "Description": "How much faster you go through speed transitions (walking to running etc)",
+                            "Options": {
+                                "Min": 0,
+                                "Max": 1000
+                            }
+                        },
+                        {
+                            "Id": "Exploration_ClimbSpeedMultiplier",
+                            "Name": "Exploration climbing speed multiplier",
+                            "Type": "slider",
+                            "Default": 2,
+                            "Description": "How much faster you climb stuff",
+                            "Options": {
+                                "Min": 0,
+                                "Max": 1000
+                            }
+                        },
+                        {
+                            "Id": "Exploration_MovementSpeedMultiplier",
+                            "Name": "Exploration movement speed modifier",
+                            "Type": "slider",
+                            "Default": 2,
+                            "Description": "How much faster you go, high value will mess with the game physic engine and lead to issue",
+                            "Options": {
+                                "Min": 0,
+                                "Max": 1000
+                            }
+                        },
+                        {
+                            "Id": "Combat_Party_AccelerationMultiplier",
+                            "Name": "Exploration climbing speed multiplier",
+                            "Type": "slider",
+                            "Default": 5,
+                            "Description": "How much faster you go through speed transitions (walking to running etc) in combat (if combat setting is enabled)",
+                            "Options": {
+                                "Min": 0,
+                                "Max": 1000
+                            }
+                        },
+                        {
+                            "Id": "Combat_Party_ClimbSpeedMultiplier",
+                            "Name": "Exploration climbing speed multiplier",
+                            "Type": "slider",
+                            "Default": 2,
+                            "Description": "How much faster you climb stuff in combat (if combat setting is enabled)",
+                            "Options": {
+                                "Min": 0,
+                                "Max": 1000
+                            }
+                        },
+                        {
+                            "Id": "Combat_Party_MovementSpeedMultiplier",
+                            "Name": "Exploration climbing speed multiplier",
+                            "Type": "slider",
+                            "Default": 2,
+                            "Description": "How much faster you go in combat (if combat setting is enabled) ",
+                            "Options": {
+                                "Min": 0,
+                                "Max": 1000
+                            }
+                        },
+                        {
+                            "Id": "Combat_Enemy_AccelerationMultiplier",
+                            "Name": "Exploration climbing speed multiplier",
+                            "Type": "slider",
+                            "Default": 10,
+                            "Description": "How much faster enemies go through speed transitions (walking to running etc) in combat (if combat setting is enabled)",
+                            "Options": {
+                                "Min": 0,
+                                "Max": 1000
+                            }
+                        },
+                        {
+                            "Id": "Combat_Enemy_ClimbSpeedMultiplier",
+                            "Name": "Exploration climbing speed multiplier",
+                            "Type": "slider",
+                            "Default": 2,
+                            "Description": "How much faster enemies climb stuff in combat (if combat setting is enabled)",
+                            "Options": {
+                                "Min": 0,
+                                "Max": 1000
+                            }
+                        },
+                        {
+                            "Id": "Combat_Enemy_MovementSpeedMultiplier",
+                            "Name": "Exploration climbing speed multiplier",
+                            "Type": "slider",
+                            "Default": 2,
+                            "Description": "How much faster enemies go in combat (if combat setting is enabled)",
+                            "Options": {
+                                "Min": 0,
+                                "Max": 1000
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "TabName": "Debug",
+            "TabId": "debug",
+            "Settings": [
+                {
+                    "Id": "debug_level",
+                    "Name": "Debug level",
+                    "Type": "slider",
+                    "Default": 3,
+                    "Description": "Debug level for the mod, used mainly for determining which messages to print",
+                    "Options": {
+                        "Min": 0,
+                        "Max": 4
+                    }
+                }
+            ]
+        }
+    ]
+}
