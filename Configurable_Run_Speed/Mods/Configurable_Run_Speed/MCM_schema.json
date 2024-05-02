@@ -70,7 +70,7 @@
                             "Name": "Exploration movement speed modifier",
                             "Type": "slider_float",
                             "Default": 2,
-                            "Tooltip": "How much faster you go, high value will mess with the game physic engine and lead to issue",
+                            "Tooltip": "How much faster you go, high values will mess with the game physic engine and lead to issue",
                             "Options": {
                                 "Min": 0,
                                 "Max": 50
@@ -80,7 +80,7 @@
                 },
                 {
                     "SectionId": "PARTY_COMBAT_SPEED_SETTINGS",
-                    "SectionName": "combat (party) speed settings",
+                    "SectionName": "Combat (party) speed settings",
                     "Settings": [
                         {
                             "Id": "Combat_Party_AccelerationMultiplier",
@@ -119,7 +119,7 @@
                 },
                 {
                     "SectionId": "ENEMY_COMBAT_SPEED_SETTINGS",
-                    "SectionName": "combat (enemies) speed settings",
+                    "SectionName": "Combat (enemies) speed settings",
                     "Settings": [
                         {
                             "Id": "Combat_Enemy_AccelerationMultiplier",
