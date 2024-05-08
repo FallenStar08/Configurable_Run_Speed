@@ -19,7 +19,9 @@ DEFAULTS = {
     Acceleration = { MovementAcceleration = 12.0, }, --Acceleration, not sure how it behave exactly, how fast you get speedy
 }
 
+
 MCMCONFIG = Mods.BG3MCM.MCMAPI
+
 
 -- -------------------------------------------------------------------------- --
 --                                General Stuff                               --
