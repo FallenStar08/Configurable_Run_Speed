@@ -1,4 +1,4 @@
-ALLOWED_FIELDS = {
+local ALLOWED_FIELDS = {
     "MovementSpeedDash",
     "MovementSpeedSprint",
     "MovementSpeedRun",
