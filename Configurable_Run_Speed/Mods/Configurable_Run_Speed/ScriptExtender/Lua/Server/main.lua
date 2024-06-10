@@ -258,7 +258,7 @@ Ext.RegisterNetListener("MCM_Saved_Setting", function(call, payload)
     if not data or data.modGUID ~= MOD_INFO.MOD_UUID or not data.settingId then
         return
     end
-
+    --TODO fix this
     if string.find(data.settingId, "Party") or string.find(data.settingId, "Exploration") then
         start()
     end

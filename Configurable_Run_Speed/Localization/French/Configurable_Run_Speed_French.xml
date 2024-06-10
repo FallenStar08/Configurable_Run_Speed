@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<contentList>
+    <content contentuid="h9b08da2596a149168544b6b70da09b66ce9g" version="1">Activer les paramètres de combat</content>
+    <content contentuid="hfb7faf7bd1ff4f3dbb580675439467c915bd" version="1">Activer ou non les paramètres spécifiques au combat</content>
+    <content contentuid="ha1a3239084994b3aa8c5df00c30344f0d9gd" version="1">Activer la modification de la vitesse de furtivité</content>
+    <content contentuid="h1e4ab60c6c6140d9bfd2467807d587fc1f27" version="1">Activer ou non la modification de la vitesse de furtivité (c'est OP)</content>
+    <content contentuid="h51c7312968bb4a89810134db9a71f0252791" version="1">Multiplicateur d'accélération en exploration</content>
+    <content contentuid="h1c0950c726f14eab92cb358a61c21dfec2ec" version="1">Combien de fois plus vite vous passez par les transitions de vitesse (marche à course, etc.)</content>
+    <content contentuid="hb2ad8b8f56984fddbd76c705f772dbbcfd89" version="1">Multiplicateur de vitesse d'escalade en exploration</content>
+    <content contentuid="ha21b723ff087436ea450778ac2429efb6907" version="1">Combien de fois plus vite vous grimpez des objets</content>
+    <content contentuid="h3e53def0e7a44012b3ecdc165721148577f5" version="1">Modificateur de vitesse de déplacement en exploration</content>
+    <content contentuid="hee5d307c86434a6494553585143d640d4844" version="1">Combien de fois plus vite vous allez, des valeurs élevées peuvent perturber le moteur physique du jeu et causer des problèmes</content>
+    <content contentuid="h5d0fb01cfb294cb1b3dc09ca8295ff82df4c" version="1">Multiplicateur d'accélération de groupe en combat</content>
+    <content contentuid="h53b5bf101fc04c2985a23a9b291f8cebf076" version="1">Combien de fois plus vite vous passez par les transitions de vitesse (de marche à course, etc.) en combat (si les paramètres de combat sont activés)</content>
+    <content contentuid="h47a8e3d880f347c2a7c87cdc2b07f917950g" version="1">Multiplicateur de vitesse d'escalade de groupe en combat</content>
+    <content contentuid="hdb1e47eb5082401d94793b9b093078eca1d4" version="1">Combien de fois plus vite vous grimpez des objets en combat (si les paramètres de combat sont activés)</content>
+    <content contentuid="hf1bd446e0c6246bdbfc0f8980ed15dc732gg" version="1">Multiplicateur de vitesse de déplacement de groupe en combat</content>
+    <content contentuid="hf2bdd3e64d3743ecba07df619d265bb588da" version="1">Combien de fois plus vite vous allez en combat (si les paramètres de combat sont activés)</content>
+    <content contentuid="hf184539aea7840b8a974edd26331a9a5771d" version="1">Multiplicateur d'accélération des ennemis en combat</content>
+    <content contentuid="h59f93053ec5b48d6b8761b30d4dd37dd85ce" version="1">Combien de fois plus vite les ennemis passent par les transitions de vitesse (marche à course, etc.) en combat (si les paramètres de combat sont activés)</content>
+    <content contentuid="h81ae439e9830486f89c2dcbcc9eb69f9eac7" version="1">Multiplicateur de vitesse d'escalade des ennemis en combat</content>
+    <content contentuid="h9c754f1397d4481ebe564a7507e078ce34bb" version="1">Combien de fois plus vite les ennemis grimpent des objets en combat (si les paramètres de combat sont activés)</content>
+    <content contentuid="h0e27be0d1cb24c9eb12dbcd311be01a71ab7" version="1">Multiplicateur de vitesse de déplacement des ennemis en combat</content>
+    <content contentuid="he6aa7be138364e4fab0e6dde54605fde0a13" version="1">Combien de fois plus vite les ennemis vont en combat (si les paramètres de combat sont activés)</content>
+    <content contentuid="h07f32fffb5bc4f8c9052b81be358e960db26" version="1">Fonctionnalités du mod</content>
+    <content contentuid="h318d4512eb984827989583f11af3475ffcb7" version="1">Paramètres de vitesse en exploration</content>
+    <content contentuid="h6010477f8a7e474e87372b2212dd29dcabbd" version="1">Paramètres de vitesse en combat (groupe)</content>
+    <content contentuid="he33e35a30e0e4cfc82ed1bc56dc0dcb7a312" version="1">Paramètres de vitesse en combat (ennemis)</content>
+</contentList>

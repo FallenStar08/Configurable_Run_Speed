@@ -23,26 +23,40 @@
                 {
                     "SectionId": "GENERAL_SETTINGS",
                     "SectionName": "Configurable Movement Speed features",
+                    "Handles": {
+                        "NameHandle": "h07f32fffb5bc4f8c9052b81be358e960db26"
+                    },
                     "Settings": [
                         {
                             "Id": "COMBAT_ENABLED",
                             "Name": "Enable combat settings",
                             "Type": "checkbox",
                             "Default": true,
-                            "Tooltip": "Whether to enable combat specific settings"
+                            "Tooltip": "Whether to enable combat specific settings",
+                            "Handles": {
+                                "NameHandle": "h9b08da2596a149168544b6b70da09b66ce9g",
+                                "TooltipHandle": "hfb7faf7bd1ff4f3dbb580675439467c915bd"
+                            }
                         },
                         {
                             "Id": "SNEAKING_ENABLED",
                             "Name": "Enable sneaking speed modifications",
                             "Type": "checkbox",
                             "Default": false,
-                            "Tooltip": "Whether to enable sneaking speed modification (this is op)"
+                            "Tooltip": "Whether to enable sneaking speed modification (this is op)",
+                            "Handles": {
+                                "NameHandle": "ha1a3239084994b3aa8c5df00c30344f0d9gd",
+                                "TooltipHandle": "h1e4ab60c6c6140d9bfd2467807d587fc1f27"
+                            }
                         }
                     ]
                 },
                 {
                     "SectionId": "EXPOLORATION_SPEED_SETTINGS",
                     "SectionName": "Exploration speed settings",
+                    "Handles": {
+                        "NameHandle": "h318d4512eb984827989583f11af3475ffcb7"
+                    },
                     "Settings": [
                         {
                             "Id": "Exploration_AccelerationMultiplier",
@@ -53,6 +67,10 @@
                             "Options": {
                                 "Min": 0,
                                 "Max": 50
+                            },
+                            "Handles": {
+                                "NameHandle": "h51c7312968bb4a89810134db9a71f0252791",
+                                "TooltipHandle": "h1c0950c726f14eab92cb358a61c21dfec2ec"
                             }
                         },
                         {
@@ -64,6 +82,10 @@
                             "Options": {
                                 "Min": 0,
                                 "Max": 50
+                            },
+                            "Handles": {
+                                "NameHandle": "hb2ad8b8f56984fddbd76c705f772dbbcfd89",
+                                "TooltipHandle": "ha21b723ff087436ea450778ac2429efb6907"
                             }
                         },
                         {
@@ -75,6 +97,10 @@
                             "Options": {
                                 "Min": 0,
                                 "Max": 50
+                            },
+                            "Handles": {
+                                "NameHandle": "h3e53def0e7a44012b3ecdc165721148577f5",
+                                "TooltipHandle": "hee5d307c86434a6494553585143d640d4844"
                             }
                         }
                     ]
@@ -82,6 +108,9 @@
                 {
                     "SectionId": "PARTY_COMBAT_SPEED_SETTINGS",
                     "SectionName": "Combat (party) speed settings",
+                    "Handles": {
+                        "NameHandle": "h6010477f8a7e474e87372b2212dd29dcabbd"
+                    },
                     "Settings": [
                         {
                             "Id": "Combat_Party_AccelerationMultiplier",
@@ -92,6 +121,10 @@
                             "Options": {
                                 "Min": 0,
                                 "Max": 50
+                            },
+                            "Handles": {
+                                "NameHandle": "h5d0fb01cfb294cb1b3dc09ca8295ff82df4c",
+                                "TooltipHandle": "h53b5bf101fc04c2985a23a9b291f8cebf076"
                             }
                         },
                         {
@@ -103,6 +136,10 @@
                             "Options": {
                                 "Min": 0,
                                 "Max": 50
+                            },
+                            "Handles": {
+                                "NameHandle": "h47a8e3d880f347c2a7c87cdc2b07f917950g",
+                                "TooltipHandle": "hdb1e47eb5082401d94793b9b093078eca1d4"
                             }
                         },
                         {
@@ -114,6 +151,10 @@
                             "Options": {
                                 "Min": 0,
                                 "Max": 50
+                            },
+                            "Handles": {
+                                "NameHandle": "hf1bd446e0c6246bdbfc0f8980ed15dc732gg",
+                                "TooltipHandle": "hf2bdd3e64d3743ecba07df619d265bb588da"
                             }
                         }
                     ]
@@ -121,6 +162,9 @@
                 {
                     "SectionId": "ENEMY_COMBAT_SPEED_SETTINGS",
                     "SectionName": "Combat (enemies) speed settings",
+                    "Handles": {
+                        "NameHandle": "he33e35a30e0e4cfc82ed1bc56dc0dcb7a312"
+                    },
                     "Settings": [
                         {
                             "Id": "Combat_Enemy_AccelerationMultiplier",
@@ -131,6 +175,10 @@
                             "Options": {
                                 "Min": 0,
                                 "Max": 50
+                            },
+                            "Handles": {
+                                "NameHandle": "hf184539aea7840b8a974edd26331a9a5771d",
+                                "TooltipHandle": "h59f93053ec5b48d6b8761b30d4dd37dd85ce"
                             }
                         },
                         {
@@ -142,6 +190,10 @@
                             "Options": {
                                 "Min": 0,
                                 "Max": 50
+                            },
+                            "Handles": {
+                                "NameHandle": "h81ae439e9830486f89c2dcbcc9eb69f9eac7",
+                                "TooltipHandle": "h9c754f1397d4481ebe564a7507e078ce34bb"
                             }
                         },
                         {
@@ -153,6 +205,10 @@
                             "Options": {
                                 "Min": 0,
                                 "Max": 50
+                            },
+                            "Handles": {
+                                "NameHandle": "h0e27be0d1cb24c9eb12dbcd311be01a71ab7",
+                                "TooltipHandle": "he6aa7be138364e4fab0e6dde54605fde0a13"
                             }
                         }
                     ]
