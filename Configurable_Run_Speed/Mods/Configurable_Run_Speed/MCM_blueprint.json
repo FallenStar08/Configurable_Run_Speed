@@ -48,6 +48,17 @@
                                 "NameHandle": "ha1a3239084994b3aa8c5df00c30344f0d9gd",
                                 "TooltipHandle": "h1e4ab60c6c6140d9bfd2467807d587fc1f27"
                             }
+                        },
+                        {
+                            "Id": "ON_SPEED_STATUS",
+                            "Name": "Only speed up on related status",
+                            "Type": "checkbox",
+                            "Default": false,
+                            "Tooltip": "Apply speed change only on speed related status (like longstrider, haste etc)",
+                            "Handles": {
+                                "NameHandle": "h5187fc48483144a097c4060ad3d37fa46g84",
+                                "TooltipHandle": "h1b324ddef015421981cd1852fcbec5c7c72a"
+                            }
                         }
                     ]
                 },

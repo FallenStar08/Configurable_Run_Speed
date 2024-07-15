@@ -2,7 +2,7 @@
 --                                   GLOBALS                                  --
 -- -------------------------------------------------------------------------- --
 
-DEFAULTS = {
+local DEFAULTS = {
     Run = {
         MovementSpeedDash = 6.0,   --Dash??? unused???
         MovementSpeedSprint = 6.0, --Sprint = going to attack something
@@ -19,8 +19,29 @@ DEFAULTS = {
     Acceleration = { MovementAcceleration = 12.0, }, --Acceleration, not sure how it behave exactly, how fast you get speedy
 }
 
+local speedStatus = { ["LONGSTRIDER"] = true, ["DASH"] = true, ["HASTE"] = true, ["MAG_MOMENTUM"] = true }
 
-MCMCONFIG = Mods.BG3MCM.MCMAPI
+local MCMCONFIG = Mods.BG3MCM.MCMAPI
+
+
+local function containsActionResourceMovement(str)
+    local pattern1 = "ActionResource%(Movement,([1-9]%d*%.?%d*),0%)"
+    --Hopefully no floating points?
+    local pattern2 = "ActionResourceMultiplier%(Movement,([1-9]%d*),0%)"
+
+    return string.match(str, pattern1) ~= nil or string.match(str, pattern2) ~= nil
+end
+
+local function statusHasMovementBoost(statusName)
+    local success, stats = pcall(function() return Ext.Stats.Get(statusName) end)
+    if success and stats and stats.Boosts then
+        if containsActionResourceMovement(stats.Boosts) then
+            return true
+        end
+    end
+    return false
+end
+
 
 
 -- -------------------------------------------------------------------------- --
@@ -28,43 +49,75 @@ MCMCONFIG = Mods.BG3MCM.MCMAPI
 -- -------------------------------------------------------------------------- --
 
 local function checkStateAndApplySpeedModifier(character)
-    -- ---------------------------- Case Party member --------------------------- --
-    if Osi.IsPartyMember(character, 1) == 1 then
-        --Case combat enabled and in combat
-        if Osi.IsInCombat(character) == 1 and MCMCONFIG:GetSettingValue("COMBAT_ENABLED", MOD_INFO.MOD_UUID) == true then
-            BasicDebug("Speeding up the following party member (Combat started, Combat enabled) : " .. character)
-            -- UpdateTemplateWithSpeedMultiplierForCharacter(character,
-            --     MCMCONFIG["Combat_Party_MovementSpeedMultiplier"],
-            --     MCMCONFIG["Combat_Party_ClimbSpeedMultiplier"],
-            --     MCMCONFIG["Combat_Party_AccelerationMultiplier"])
-
-            UpdateTemplateWithSpeedMultiplierForCharacter(character,
-                MCMCONFIG:GetSettingValue("Combat_Party_MovementSpeedMultiplier", MOD_INFO.MOD_UUID),
-                MCMCONFIG:GetSettingValue("Combat_Party_ClimbSpeedMultiplier", MOD_INFO.MOD_UUID),
-                MCMCONFIG:GetSettingValue("Combat_Party_AccelerationMultiplier", MOD_INFO.MOD_UUID))
-            --Case Combat disabled and in combat
-        elseif Osi.IsInCombat(character) == 1 and MCMCONFIG:GetSettingValue("COMBAT_ENABLED", MOD_INFO.MOD_UUID) == false then
-            BasicDebug("Speeding down the following party member (Combat started, Combat disabled) : " .. character)
-            RestoreTemplateDefaultSpeedForCharacter(character)
-            --Case not in combat
-        else
-            BasicDebug("Speeding up the following party member (not in Combat) : " .. character)
-            UpdateTemplateWithSpeedMultiplierForCharacter(character,
-                MCMCONFIG:GetSettingValue("Exploration_MovementSpeedMultiplier", MOD_INFO.MOD_UUID),
-                MCMCONFIG:GetSettingValue("Exploration_ClimbSpeedMultiplier", MOD_INFO.MOD_UUID),
-                MCMCONFIG:GetSettingValue("Exploration_AccelerationMultiplier", MOD_INFO.MOD_UUID))
+    local isCharacter = Osi.IsCharacter(character) == 1
+    if not isCharacter then return end
+    local isPartyMember = Osi.IsPartyMember(character, 1) == 1
+    local applyOnSpeedStatus = GetMCM("ON_SPEED_STATUS")
+    local hasSpeedStatus
+    if applyOnSpeedStatus then
+        local characterStatuses = GetAppliedStatus(_GE(character))
+        BasicDebug(characterStatuses)
+        for statusName, v in pairs(characterStatuses) do
+            if statusHasMovementBoost(statusName) then
+                hasSpeedStatus = true
+                break
+            end
         end
-        -- --------------------- Case non party member in combat -------------------- --
-    elseif Osi.IsCharacter(character) == 1 and Osi.IsInCombat(character) == 1 and MCMCONFIG:GetSettingValue("COMBAT_ENABLED", MOD_INFO.MOD_UUID) == true then
-        BasicDebug("Speeding up the following enemy (Combat) : " .. character)
-        UpdateTemplateWithSpeedMultiplierForCharacter(character,
-            MCMCONFIG:GetSettingValue("Combat_Enemy_MovementSpeedMultiplier", MOD_INFO.MOD_UUID),
-            MCMCONFIG:GetSettingValue("Combat_Enemy_ClimbSpeedMultiplier", MOD_INFO.MOD_UUID),
-            MCMCONFIG:GetSettingValue("Combat_Enemy_AccelerationMultiplier", MOD_INFO.MOD_UUID))
-        --Case end of combat if combat is enabled
-    elseif Osi.IsCharacter(character) == 1 and Osi.IsInCombat(character) == 0 and MCMCONFIG:GetSettingValue("COMBAT_ENABLED", MOD_INFO.MOD_UUID) == true then
-        BasicDebug("Speeding down the following enemy (end of Combat) : " .. character)
-        RestoreTemplateDefaultSpeedForCharacter(character)
+    end
+
+    local combatEnabled = GetMCM("COMBAT_ENABLED")
+    local combatPartyMovementSpeedMultiplier = GetMCM("Combat_Party_MovementSpeedMultiplier")
+    local combatPartyClimbSpeedMultiplier = GetMCM("Combat_Party_ClimbSpeedMultiplier")
+    local combatPartyAccelerationMultiplier = GetMCM("Combat_Party_AccelerationMultiplier")
+    local explorationMovementSpeedMultiplier = GetMCM("Exploration_MovementSpeedMultiplier")
+    local explorationClimbSpeedMultiplier = GetMCM("Exploration_ClimbSpeedMultiplier")
+    local explorationAccelerationMultiplier = GetMCM("Exploration_AccelerationMultiplier")
+    local combatEnemyMovementSpeedMultiplier = GetMCM("Combat_Enemy_MovementSpeedMultiplier")
+    local combatEnemyClimbSpeedMultiplier = GetMCM("Combat_Enemy_ClimbSpeedMultiplier")
+    local combatEnemyAccelerationMultiplier = GetMCM("Combat_Enemy_AccelerationMultiplier")
+    -- Case Party member
+    if Osi.IsPartyMember(character, 1) == 1 then
+        if applyOnSpeedStatus and not hasSpeedStatus then
+            BasicDebug("Restoring default speed for party member (no speed status) : " .. character)
+            RestoreTemplateDefaultSpeedForCharacter(character)
+        else
+            if Osi.IsInCombat(character) == 1 then
+                if combatEnabled then
+                    BasicDebug("Speeding up the following party member (Combat started, Combat enabled) : " .. character)
+                    UpdateTemplateWithSpeedMultiplierForCharacter(character,
+                        combatPartyMovementSpeedMultiplier,
+                        combatPartyClimbSpeedMultiplier,
+                        combatPartyAccelerationMultiplier)
+                else
+                    BasicDebug("Speeding down the following party member (Combat started, Combat disabled) : " ..
+                        character)
+                    RestoreTemplateDefaultSpeedForCharacter(character)
+                end
+            else
+                BasicDebug("Speeding up the following party member (not in Combat) : " .. character)
+                UpdateTemplateWithSpeedMultiplierForCharacter(character,
+                    explorationMovementSpeedMultiplier,
+                    explorationClimbSpeedMultiplier,
+                    explorationAccelerationMultiplier)
+            end
+        end
+        -- Case non party member in combat
+    elseif Osi.IsCharacter(character) == 1 then
+        if applyOnSpeedStatus and not hasSpeedStatus then
+            BasicDebug("Restoring default speed for enemy (no speed status) : " .. character)
+            RestoreTemplateDefaultSpeedForCharacter(character)
+        else
+            if Osi.IsInCombat(character) == 1 and combatEnabled then
+                BasicDebug("Speeding up the following enemy (Combat) : " .. character)
+                UpdateTemplateWithSpeedMultiplierForCharacter(character,
+                    combatEnemyMovementSpeedMultiplier,
+                    combatEnemyClimbSpeedMultiplier,
+                    combatEnemyAccelerationMultiplier)
+            elseif Osi.IsInCombat(character) == 0 and combatEnabled then
+                BasicDebug("Speeding down the following enemy (end of Combat) : " .. character)
+                RestoreTemplateDefaultSpeedForCharacter(character)
+            end
+        end
     end
 end
 function GetBattliesBaddies(ALLIES)
@@ -121,7 +174,7 @@ end
 function UpdateTemplateWithSpeedMultiplierForCharacter(character, movement_speed_multi, climbing_speed_multi,
                                                        acceleration_multi)
     character = GUID(character)
-    local sneakingEnabled = MCMCONFIG:GetSettingValue("SNEAKING_ENABLED", MOD_INFO.MOD_UUID) == true
+    local sneakingEnabled = GetMCM("SNEAKING_ENABLED")
     local characterTemplate = Ext.Template.GetTemplate(character) or
         Ext.Template.GetTemplate(GUID(Osi.GetTemplate(character)))
     local charEntity = Ext.Entity.Get(character)
@@ -144,9 +197,9 @@ function UpdateTemplateWithSpeedMultiplierForCharacter(character, movement_speed
     end
     local serializedTemplateInfo = Ext.Json.Stringify(Ext.Types.Serialize(characterTemplate))
     local serializedTransfoTemplateInfo = transfoTemplate and Ext.Json.Stringify(Ext.Types.Serialize(characterTemplate))
-    Ext.Net.BroadcastMessage("Fallen_RunSpeed_TemplateChanged", serializedTemplateInfo)
+    Net.Send("Fallen_RunSpeed_TemplateChanged", serializedTemplateInfo)
     if serializedTransfoTemplateInfo then
-        Ext.Net.BroadcastMessage("Fallen_RunSpeed_TemplateChanged",
+        Net.Send("Fallen_RunSpeed_TemplateChanged",
             serializedTransfoTemplateInfo)
     end
 end
@@ -154,15 +207,6 @@ end
 function RestoreTemplateDefaultSpeedForCharacter(character)
     character = GUID(character)
     UpdateTemplateWithSpeedMultiplierForCharacter(character, 1, 1, 1)
-end
-
-function RestoreOriginalValues(mergedList)
-    BasicDebug("RestoreOriginalValues() - Restoring original speed")
-    for _, listItem in pairs(mergedList) do
-        if #listItem >= 36 then
-            RestoreTemplateDefaultSpeedForCharacter(listItem)
-        end
-    end
 end
 
 -- -------------------------------------------------------------------------- --
@@ -196,6 +240,28 @@ end)
 Ext.Osiris.RegisterListener("LeftCombat", 2, "after", function(object, combatGuid)
     checkStateAndApplySpeedModifier(GUID(object))
 end)
+
+
+-- -------------------------------------------------------------------------- --
+--                                  STATUSES                                  --
+-- -------------------------------------------------------------------------- --
+local function registerStatusesListener()
+    Ext.Osiris.RegisterListener("StatusApplied", 4, "after", function(object, status, causee, storyActionID)
+        BasicDebug(status)
+        if statusHasMovementBoost(status) then
+            BasicDebug("Yes")
+            checkStateAndApplySpeedModifier(object)
+        end
+    end)
+
+    Ext.Osiris.RegisterListener("StatusRemoved", 4, "after", function(object, status, causee, applyStoryActionID)
+        BasicDebug(status)
+        if statusHasMovementBoost(status) then
+            BasicDebug("Yes")
+            checkStateAndApplySpeedModifier(object)
+        end
+    end)
+end
 
 -- -------------------------------------------------------------------------- --
 --                             PARTY JOINED / LEFT / TRANSFORMED              --
@@ -234,14 +300,16 @@ end)
 
 local function start(level, isEditorMode)
     if level == "SYS_CC_I" then return end
-    --if not MCMCONFIG then MCMCONFIG = InitConfig() end
     ALLIES = MergeSquadiesAndSummonies()
-    --In case we load during a fight, apply the right multipliers.
     --TODO fix this for enemies, they don't get speed up yet if you load into a fight
     --TODO fix with uservars...
     BasicDebug("EV_LevelGameplayStarted : ")
     for _, ally in pairs(ALLIES) do
         checkStateAndApplySpeedModifier(ally)
+    end
+
+    if GetMCM("ON_SPEED_STATUS") then
+        registerStatusesListener()
     end
 end
 
@@ -253,13 +321,17 @@ Ext.Events.ResetCompleted:Subscribe(start)
 --                                     MCM                                    --
 -- -------------------------------------------------------------------------- --
 
-Ext.RegisterNetListener("MCM_Saved_Setting", function(call, payload)
+
+
+Net.ListenFor("MCM_Saved_Setting", function(payload, user)
     local data = Ext.Json.Parse(payload)
     if not data or data.modGUID ~= MOD_INFO.MOD_UUID or not data.settingId then
         return
     end
-    --TODO fix this
-    if string.find(data.settingId, "Party") or string.find(data.settingId, "Exploration") then
-        start()
+    start()
+    if data.settingId == "ON_SPEED_STATUS" then
+        if GetMCM("ON_SPEED_STATUS") then
+            registerStatusesListener()
+        end
     end
 end)

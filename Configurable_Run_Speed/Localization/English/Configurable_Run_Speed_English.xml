@@ -26,4 +26,6 @@
     <content contentuid="h318d4512eb984827989583f11af3475ffcb7" version="1">Exploration speed settings</content>
     <content contentuid="h6010477f8a7e474e87372b2212dd29dcabbd" version="1">Combat (party) speed settings</content>
     <content contentuid="he33e35a30e0e4cfc82ed1bc56dc0dcb7a312" version="1">Combat (enemies) speed settings</content>
+    <content contentuid="h5187fc48483144a097c4060ad3d37fa46g84" version="1">Only Apply On Speed Status</content>
+    <content contentuid="h1b324ddef015421981cd1852fcbec5c7c72a" version="1">Apply speed change only on speed related status (like longstrider, haste etc)</content>
 </contentList>
