@@ -52,7 +52,9 @@ local function checkStateAndApplySpeedModifier(character)
     local isCharacter = Osi.IsCharacter(character) == 1
     if not isCharacter then return end
     local isPartyMember = Osi.IsPartyMember(character, 1) == 1
-    local applyOnSpeedStatus = GetMCM("ON_SPEED_STATUS")
+    local MCMSettings = GetMCMTable()
+    --local applyOnSpeedStatus = GetMCM("ON_SPEED_STATUS")
+    local applyOnSpeedStatus = MCMSettings["ON_SPEED_STATUS"]
     local hasSpeedStatus
     if applyOnSpeedStatus then
         local characterStatuses = GetAppliedStatus(_GE(character))
@@ -64,17 +66,16 @@ local function checkStateAndApplySpeedModifier(character)
             end
         end
     end
-
-    local combatEnabled = GetMCM("COMBAT_ENABLED")
-    local combatPartyMovementSpeedMultiplier = GetMCM("Combat_Party_MovementSpeedMultiplier")
-    local combatPartyClimbSpeedMultiplier = GetMCM("Combat_Party_ClimbSpeedMultiplier")
-    local combatPartyAccelerationMultiplier = GetMCM("Combat_Party_AccelerationMultiplier")
-    local explorationMovementSpeedMultiplier = GetMCM("Exploration_MovementSpeedMultiplier")
-    local explorationClimbSpeedMultiplier = GetMCM("Exploration_ClimbSpeedMultiplier")
-    local explorationAccelerationMultiplier = GetMCM("Exploration_AccelerationMultiplier")
-    local combatEnemyMovementSpeedMultiplier = GetMCM("Combat_Enemy_MovementSpeedMultiplier")
-    local combatEnemyClimbSpeedMultiplier = GetMCM("Combat_Enemy_ClimbSpeedMultiplier")
-    local combatEnemyAccelerationMultiplier = GetMCM("Combat_Enemy_AccelerationMultiplier")
+    local combatEnabled = MCMSettings["COMBAT_ENABLED"]
+    local combatPartyMovementSpeedMultiplier = MCMSettings["Combat_Party_MovementSpeedMultiplier"]
+    local combatPartyClimbSpeedMultiplier = MCMSettings["Combat_Party_ClimbSpeedMultiplier"]
+    local combatPartyAccelerationMultiplier = MCMSettings["Combat_Party_AccelerationMultiplier"]
+    local explorationMovementSpeedMultiplier = MCMSettings["Exploration_MovementSpeedMultiplier"]
+    local explorationClimbSpeedMultiplier = MCMSettings["Exploration_ClimbSpeedMultiplier"]
+    local explorationAccelerationMultiplier = MCMSettings["Exploration_AccelerationMultiplier"]
+    local combatEnemyMovementSpeedMultiplier = MCMSettings["Combat_Enemy_MovementSpeedMultiplier"]
+    local combatEnemyClimbSpeedMultiplier = MCMSettings["Combat_Enemy_ClimbSpeedMultiplier"]
+    local combatEnemyAccelerationMultiplier = MCMSettings["Combat_Enemy_AccelerationMultiplier"]
     -- Case Party member
     if Osi.IsPartyMember(character, 1) == 1 then
         if applyOnSpeedStatus and not hasSpeedStatus then

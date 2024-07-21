@@ -26,6 +26,6 @@
     <content contentuid="h318d4512eb984827989583f11af3475ffcb7" version="1">Paramètres de vitesse en exploration</content>
     <content contentuid="h6010477f8a7e474e87372b2212dd29dcabbd" version="1">Paramètres de vitesse en combat (groupe)</content>
     <content contentuid="he33e35a30e0e4cfc82ed1bc56dc0dcb7a312" version="1">Paramètres de vitesse en combat (ennemis)</content>
-    <content contentuid="h5187fc48483144a097c4060ad3d37fa46g84" version="1">Only Apply On Speed Status</content>
-    <content contentuid="h1b324ddef015421981cd1852fcbec5c7c72a" version="1">Apply speed change only on speed related status (like longstrider, haste etc)</content>
+    <content contentuid="h5187fc48483144a097c4060ad3d37fa46g84" version="1">Seulement si buff de vitesse appliqué</content>
+    <content contentuid="h1b324ddef015421981cd1852fcbec5c7c72a" version="1">Applique le changement de vitesse seulement si un buff de vitesse affecte le perso (comme Hâte ou Pas allongé etc)</content>
 </contentList>
