@@ -53,6 +53,7 @@ local function checkStateAndApplySpeedModifier(character)
     if not isCharacter then return end
     local isPartyMember = Osi.IsPartyMember(character, 1) == 1
     local MCMSettings = GetMCMTable()
+    if not MCMSettings["MOD_ENABLED"] then return end
     --local applyOnSpeedStatus = GetMCM("ON_SPEED_STATUS")
     local applyOnSpeedStatus = MCMSettings["ON_SPEED_STATUS"]
     local hasSpeedStatus
@@ -301,16 +302,18 @@ end)
 
 local function start(level, isEditorMode)
     if level == "SYS_CC_I" then return end
-    ALLIES = MergeSquadiesAndSummonies()
-    --TODO fix this for enemies, they don't get speed up yet if you load into a fight
-    --TODO fix with uservars...
-    BasicDebug("EV_LevelGameplayStarted : ")
-    for _, ally in pairs(ALLIES) do
-        checkStateAndApplySpeedModifier(ally)
-    end
+    if GetMCM("MOD_ENABLED") then
+        ALLIES = MergeSquadiesAndSummonies()
+        --TODO fix this for enemies, they don't get speed up yet if you load into a fight
+        --TODO fix with uservars...
+        BasicDebug("EV_LevelGameplayStarted : ")
+        for _, ally in pairs(ALLIES) do
+            checkStateAndApplySpeedModifier(ally)
+        end
 
-    if GetMCM("ON_SPEED_STATUS") then
-        registerStatusesListener()
+        if GetMCM("ON_SPEED_STATUS") then
+            registerStatusesListener()
+        end
     end
 end
 
@@ -323,16 +326,28 @@ Ext.Events.ResetCompleted:Subscribe(start)
 -- -------------------------------------------------------------------------- --
 
 
-
 Net.ListenFor("MCM_Saved_Setting", function(payload, user)
     local data = Ext.Json.Parse(payload)
     if not data or data.modGUID ~= MOD_INFO.MOD_UUID or not data.settingId then
         return
     end
-    start()
-    if data.settingId == "ON_SPEED_STATUS" then
-        if GetMCM("ON_SPEED_STATUS") then
+
+    local settingId = data.settingId
+    local value = data.value
+
+    if settingId == "ON_SPEED_STATUS" then
+        if value then
             registerStatusesListener()
         end
+    elseif settingId == "MOD_ENABLED" then
+        if value then
+            --...
+        else
+            ALLIES = MergeSquadiesAndSummonies()
+            for _, ally in pairs(ALLIES) do
+                RestoreTemplateDefaultSpeedForCharacter(ally)
+            end
+        end
     end
+    start()
 end)
