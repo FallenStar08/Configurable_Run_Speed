@@ -19,10 +19,6 @@ local DEFAULTS = {
     Acceleration = { MovementAcceleration = 12.0, }, --Acceleration, not sure how it behave exactly, how fast you get speedy
 }
 
-local speedStatus = { ["LONGSTRIDER"] = true, ["DASH"] = true, ["HASTE"] = true, ["MAG_MOMENTUM"] = true }
-
-local MCMCONFIG = Mods.BG3MCM.MCMAPI
-
 
 local function containsActionResourceMovement(str)
     local pattern1 = "ActionResource%(Movement,([1-9]%d*%.?%d*),0%)"
@@ -316,6 +312,8 @@ local function start(level, isEditorMode)
         end
     end
 end
+
+
 
 Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", start)
 Ext.Events.ResetCompleted:Subscribe(start)
