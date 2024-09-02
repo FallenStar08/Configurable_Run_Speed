@@ -324,9 +324,8 @@ Ext.Events.ResetCompleted:Subscribe(start)
 -- -------------------------------------------------------------------------- --
 
 
-Net.ListenFor("MCM_Saved_Setting", function(payload, user)
-    local data = Ext.Json.Parse(payload)
-    if not data or data.modGUID ~= MOD_INFO.MOD_UUID or not data.settingId then
+Ext.ModEvents.BG3MCM["MCM_Setting_Saved"]:Subscribe(function(data)
+    if not data or data.modUUID ~= MOD_INFO.MOD_UUID or not data.settingId then
         return
     end
 
